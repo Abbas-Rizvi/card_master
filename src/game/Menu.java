@@ -17,6 +17,7 @@ public class Menu {
 	// printMenu
 	// prints game menu and returns number of available games
 	public static void printMenu() {
+		System.out.println("\n\nWelcome to Card Master\n\n");
 		System.out.println("What game would you like to play today?");
 
 		System.out.println("1: Blackjack");
@@ -61,12 +62,6 @@ public class Menu {
 			break;
 		}
 
-		if (!exit) {
-			//prompt exit
-			System.out.println("Do you want to exit? [y/N]");
-			if (scan.hasNext("y"))
-				exit = true;
-		}
 
 	}
 
@@ -77,7 +72,6 @@ public class Menu {
 
 
 		// welcome message
-		System.out.println("Welcome to Card Master\n");
 
 		while (!exit) {
 			printMenu();

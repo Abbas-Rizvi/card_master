@@ -15,16 +15,88 @@ public class BlackJack {
 
 		// If Player won
 		if (win) {
-			System.out.println("Dealer Bust; You Win!");
+			System.out.println("You Win!");
 			p1.win();
 		} else {
 			// if player loses
-			System.out.println("Player Bust; Dealer Wins!");
+			System.out.println("Dealer Wins!");
 			p1.lose();
 		}
 
+	}
 
 
+	//return cards to deck from previous games
+	public void returnCards() {
+		for (int i= 0; i < p1.deck.num_cards(); i++) {
+			deck.newCard(p1.deck.deal());
+		}
+
+		for (int i= 0; i < host.deck.num_cards(); i++) {
+			deck.newCard(host.deck.deal());
+		}
+	}
+
+	// place wager
+	// returns false on failure
+	public boolean wager(double wager) {
+		
+		System.out.println("\n\nEnter Amount you wish to Wager: ");
+
+		if (!p1.setBet(Menu.scan.nextDouble())) {
+			System.out.println("Invalid Bet; Exiting");
+			return false;
+		}
+		
+		return true;
+
+	}
+	
+	
+	// Deal Cards
+	public void dealCard(Player player, int numCards) {
+		
+		for (int i =0 ; i < numCards ; i++ ) {
+			player.deck.newCard(deck.deal());
+		}
+
+	}
+	
+	// player decision for hit or stay
+	// returns true if game end
+	public boolean playerOption(int optSel) {
+		// Option cases
+		switch (optSel) {
+		case 1: 
+			return hit(p1);
+
+		case 2: 
+			// Stay
+			return true;
+		default:
+			System.out.println("Invalid Selection");
+			break;
+		}
+		
+		return false;
+	}
+		
+	
+	// player draws card, returns true if hand over 21
+	private boolean hit(Player player) {
+		// TODO Auto-generated method stub
+		// dealer decides if they should hit
+		dealCard(player,1);
+
+		System.out.println(player.getName() + " Drew: " + player.deck.printCard(player.deck.num_cards() - 1));
+
+		//if went over 21, break loop
+		if (player.deck.handScore() > 21) {
+			return true;
+
+		}
+
+		return false;
 	}
 
 	// Game Table
@@ -35,40 +107,30 @@ public class BlackJack {
 		boolean exit = false;
 
 		// Welcome player
-		System.out.println("\n\nWelcome to Blackjack table " + p1.getName());
+		System.out.println("\n\nWelcome to the Blackjack table " + p1.getName());
 		System.out.println("Your Current Balance is $" +  p1.getMoney());
 
-		// take bet
-		System.out.println("Enter Amount you wish to bet: ");
+		// Placing Wager
+		System.out.println("Enter Amount You Wish to Wager: ");
+
 		if (!p1.setBet(Menu.scan.nextDouble())) {
 			exit = true;
-			System.out.println("Invalid Bet; Exiting");
+			System.out.println("Invalid Wager!; Returning to menu");
+		} else {
+			System.out.println(p1.getName() + " Has Wagered $" + p1.getBet() + "!");
+			returnCards();
+
+			//deal cards
+			deck.shuffle();
+
+			dealCard(host,2);
+			dealCard(p1,2);
 		}
-		System.out.println(p1.getName() + " Has Wagered $" + p1.getBet() + "!");
-		
-		//return cards to deck from previous games
-		for (int i= 0; i < p1.deck.num_cards(); i++) {
-			deck.newCard(p1.deck.deal());
-		}
-
-		for (int i= 0; i < host.deck.num_cards(); i++) {
-			deck.newCard(host.deck.deal());
-		}
-
-		//deal cards
-		deck.shuffle();
-
-		host.deck.newCard(deck.deal());
-		host.deck.newCard(deck.deal());
-
-		p1.deck.newCard(deck.deal());
-		p1.deck.newCard(deck.deal());
-		
 
 
 		while (!exit) {
 
-			System.out.println("---- Dealer Hand ----");
+			System.out.println("\n---- Dealer Hand ----");
 			System.out.println("HIDDEN");
 
 			//prints all cards except 1 for dealer hand
@@ -85,59 +147,18 @@ public class BlackJack {
 			System.out.println("1: Hit");
 			System.out.println("2: Stay");
 
+			// player option selection
+			exit = playerOption(Menu.scan.nextInt());
 
-			// fix this later ***********************
-			while (!Menu.scan.hasNextInt()) {
-				System.out.println("invalid input");
-
-				Menu.scan.nextInt();
-			}
-
-			int optSel = Menu.scan.nextInt();
-
-
-			// Option cases
-			switch (optSel) {
-			case 1: 
-				// Hit
-				p1.deck.newCard(deck.deal());
-
-				//if went over 21, break loop
-				if (p1.deck.handScore() > 21) {
-					exit = true;
-					break;
-				}
-
-			case 2: 
-				// Stay
-				exit = true;
-
-				break;
-			default:
-				System.out.println("Invalid Selection");
-				break;
-			}
-
-
-
-			// dealer decides if they should hit
-			if ( p1.deck.handScore() > host.deck.handScore() && host.deck.handScore() <= 17 ) {
-				host.deck.newCard(deck.deal());
-
-				//if went over 21, break loop
-				if (host.deck.handScore() > 21) {
-					exit = true;
-					break;
-				}
-			}
-
-
+			// dealer draw card
+			if ( host.deck.handScore() > host.deck.handScore() && host.deck.handScore() <= 17 ) 
+				exit = hit(host);
 		}
 
-		if (p1.deck.handScore() >= 21) {
+		if (p1.deck.handScore() > 21) {
 			//player bust
 			gameOver(false);
-		} else if (host.deck.handScore() >= 21 ) {
+		} else if (host.deck.handScore() > 21 ) {
 			//host bust
 			gameOver(true);
 		} else if (p1.deck.handScore() > host.deck.handScore()){
@@ -148,7 +169,7 @@ public class BlackJack {
 			gameOver(false);
 		} else {
 			//draw
-
+			
 		}
 
 
@@ -157,6 +178,9 @@ public class BlackJack {
 		//
 
 	}
+
+
+
 
 
 

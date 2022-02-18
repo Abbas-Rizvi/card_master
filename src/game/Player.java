@@ -20,7 +20,7 @@ public class Player {
 		// check if can be removed from account
 		// if player has enough, remove and move to bet
 		// otherwise inform player about invalid bet
-		if ((money - amount) > 0) {
+		if (bet < money) {
 			money = money - amount;
 			bet = amount;
 			return true;
@@ -38,6 +38,11 @@ public class Player {
 	// return amount placed in bet
 	public double getBet() {
 		return bet;
+	}
+	
+	//returns bet to player
+	public void draw() {
+		money += bet;
 	}
 	
 	// if player won, reward double amount placed in bet
