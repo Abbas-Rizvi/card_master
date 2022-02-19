@@ -39,7 +39,7 @@ public class BlackJack {
 
 	// place wager
 	// returns false on failure
-	public boolean wager(double wager) {
+	public boolean wager() {
 		
 		System.out.println("\n\nEnter Amount you wish to Wager: ");
 
@@ -91,10 +91,10 @@ public class BlackJack {
 		System.out.println(player.getName() + " Drew: " + player.deck.printCard(player.deck.num_cards() - 1));
 
 		//if went over 21, break loop
-		if (player.deck.handScore() > 21) {
+		if (player.deck.handScore() > 21) 
 			return true;
 
-		}
+		
 
 		return false;
 	}

@@ -10,10 +10,6 @@ public class Player {
 	
 	public Deck deck = new Deck(true);
 
-	// constructor
-	public Player() {
-	}
-
 
 	public boolean setBet(double amount) {
 		
