@@ -82,6 +82,8 @@ public class Deck {
 		
 	}
 
+		
+	// adds specific card to deck
 	public String newCard(Card newCard) {
 		
 		deck.add(newCard);

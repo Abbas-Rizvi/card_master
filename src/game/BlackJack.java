@@ -3,11 +3,11 @@ package game;
 public class BlackJack {
 
 	//create deck for dealer
-	Deck deck = new Deck(false);
+	public Deck mainDeck = new Deck(false);
 
 	//create dealer and player 
-	Player host = new Player();
-	Player p1 = new Player();
+	public Player host = new Player();
+	public Player p1 = new Player();
 
 	// --------------------
 	// game over
@@ -27,7 +27,8 @@ public class BlackJack {
 
 
 	//return cards to deck from previous games
-	public void returnCards() {
+	public void returnCards(Player p1, Player p2, Deck deck) {
+
 		for (int i= 0; i < p1.deck.num_cards(); i++) {
 			deck.newCard(p1.deck.deal());
 		}
@@ -54,13 +55,18 @@ public class BlackJack {
 	
 	
 	// Deal Cards
-	public void dealCard(Player player, int numCards) {
+	public void dealCard(Player player, Deck deck ,int numCards) {
 		
+		//shuffle
+		deck.shuffle();
+
+		// deal
 		for (int i =0 ; i < numCards ; i++ ) {
 			player.deck.newCard(deck.deal());
 		}
 
 	}
+	
 	
 	// player decision for hit or stay
 	// returns true if game end
@@ -83,10 +89,10 @@ public class BlackJack {
 		
 	
 	// player draws card, returns true if hand over 21
-	private boolean hit(Player player) {
+	public boolean hit(Player player) {
 		// TODO Auto-generated method stub
 		// dealer decides if they should hit
-		dealCard(player,1);
+		dealCard(player,mainDeck,1);
 
 		System.out.println(player.getName() + " Drew: " + player.deck.printCard(player.deck.num_cards() - 1));
 
@@ -94,8 +100,14 @@ public class BlackJack {
 		if (player.deck.handScore() > 21) 
 			return true;
 
+		return false;
+	}
+	
+	public boolean dealerOption(Player player, Player dealer) {
+	
+		if ( player.deck.handScore() > dealer.deck.handScore() && dealer.deck.handScore() <= 17 )
+			return true;
 		
-
 		return false;
 	}
 
@@ -118,15 +130,11 @@ public class BlackJack {
 			System.out.println("Invalid Wager!; Returning to menu");
 		} else {
 			System.out.println(p1.getName() + " Has Wagered $" + p1.getBet() + "!");
-			returnCards();
-
-			//deal cards
-			deck.shuffle();
-
-			dealCard(host,2);
-			dealCard(p1,2);
+			returnCards(p1,host,mainDeck);
 		}
 
+		dealCard(host,mainDeck,2);
+		dealCard(p1,mainDeck,2);
 
 		while (!exit) {
 
@@ -151,7 +159,7 @@ public class BlackJack {
 			exit = playerOption(Menu.scan.nextInt());
 
 			// dealer draw card
-			if ( host.deck.handScore() > host.deck.handScore() && host.deck.handScore() <= 17 ) 
+			if (dealerOption(p1,host))
 				exit = hit(host);
 		}
 
@@ -169,13 +177,11 @@ public class BlackJack {
 			gameOver(false);
 		} else {
 			//draw
+			System.out.println("Draw! Returned Bet");
+			p1.draw();
 			
 		}
 
-
-
-
-		//
 
 	}
 
