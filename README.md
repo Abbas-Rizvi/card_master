@@ -1,4 +1,4 @@
-# Card Master- Blackjack
+# Card Master - Blackjack
 
 Card Master is an extensible card game software written in Java.
 
