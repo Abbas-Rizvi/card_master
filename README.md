@@ -22,7 +22,7 @@ Clone repository and enter directory
 $ git clone https://github.com/Abbas-Rizvi/card_master.git
 $ cd card_master
 ```
-Run Menu.java file using JVM
+Run Menu.java file using JVM/Java IDE
 
 ```
 src/game/Menu.java
