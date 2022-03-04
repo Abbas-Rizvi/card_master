@@ -25,16 +25,15 @@ public class BlackJack {
 
 	}
 
-
 	//return cards to deck from previous games
 	public void returnCards(Player p1, Player p2, Deck deck) {
 
-		for (int i= 0; i < p1.deck.num_cards(); i++) {
+		while (p1.deck.num_cards() > 0) { 
 			deck.newCard(p1.deck.deal());
 		}
 
-		for (int i= 0; i < host.deck.num_cards(); i++) {
-			deck.newCard(host.deck.deal());
+		while (p2.deck.num_cards() > 0) { 
+			deck.newCard(p2.deck.deal());
 		}
 	}
 
@@ -74,7 +73,7 @@ public class BlackJack {
 		// Option cases
 		switch (optSel) {
 		case 1: 
-			return hit(p1);
+			return hit(p1,mainDeck);
 
 		case 2: 
 			// Stay
@@ -89,10 +88,10 @@ public class BlackJack {
 		
 	
 	// player draws card, returns true if hand over 21
-	public boolean hit(Player player) {
+	public boolean hit(Player player, Deck deck) {
 		// TODO Auto-generated method stub
 		// dealer decides if they should hit
-		dealCard(player,mainDeck,1);
+		dealCard(player,deck,1);
 
 		System.out.println(player.getName() + " Drew: " + player.deck.printCard(player.deck.num_cards() - 1));
 
@@ -117,6 +116,9 @@ public class BlackJack {
 
 		//used as exit condition
 		boolean exit = false;
+
+		//give dealer name
+		host.setName("Dealer");
 
 		// Welcome player
 		System.out.println("\n\nWelcome to the Blackjack table " + p1.getName());
@@ -160,7 +162,7 @@ public class BlackJack {
 
 			// dealer draw card
 			if (dealerOption(p1,host))
-				exit = hit(host);
+				exit = hit(host,mainDeck);
 		}
 
 		if (p1.deck.handScore() > 21) {

@@ -61,8 +61,8 @@ public class DeckTest {
 		
 		deck.newCard(c1);
 		
-		assertTrue(deck.deal().equals(c1));
-		
+		//test toString function because equating object error
+		assertTrue(deck.deal().toString().equals(c1.toString()));
 		
 	}
 	
@@ -91,7 +91,8 @@ public class DeckTest {
 		// add card to deck
 		deck.newCard(c1);
 		
-		assertTrue(deck.deal().equals(c1));
+		//test toString function because equating object error
+		assertTrue(deck.deal().toString().equals(c1.toString()));
 		
 	}
 

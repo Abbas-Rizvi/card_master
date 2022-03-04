@@ -28,9 +28,27 @@ public class BlackJackTest {
 
 	}
 	
+	//test "hit" function for drawing new card and checking
+	// if result is over 21, returns bool
 	@Test
 	public void testHit() {
-		fail("Not imp");
+		Deck deck1 = new Deck(true);
+		
+		Card c1 = new Card(Card.Suit.CLUBS, Card.Value.NINE);
+		Card c2 = new Card(Card.Suit.CLUBS, Card.Value.NINE);
+		Card c3 = new Card(Card.Suit.CLUBS, Card.Value.NINE);
+		
+		// total card value is 27
+		deck1.newCard(c1);
+		deck1.newCard(c2);
+		deck1.newCard(c3);
+	
+		// after third hit, player will bust
+		assertFalse(bj.hit(p1, deck1));
+		assertFalse(bj.hit(p1, deck1));
+
+		assertTrue(bj.hit(p1, deck1));
+		
 	}
 	
 	@Test
@@ -47,7 +65,9 @@ public class BlackJackTest {
 		bj.returnCards(p1, host, deck);
 		
 		//verify retrieval
+		assertEquals(0,p1.deck.num_cards());
 		assertEquals(0,host.deck.num_cards());
+
 		assertEquals(52, deck.num_cards());
 	}
 
